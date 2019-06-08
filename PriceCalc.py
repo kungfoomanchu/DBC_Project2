@@ -191,6 +191,11 @@ item_dict = [
         "name": "50 Cent",
         "date": "2014-02-11T20:00:00",
         "price": 400000
+},{
+        "item": "cigs",
+        "name": "365 Packs of Cigarettes in 2014",
+        "date": "2014-02-11T20:00:00",
+        "price": 5.45*365
 }]
 
 item_df = pd.DataFrame(item_dict)
@@ -257,3 +262,58 @@ print(item_quantity_current)
 # }
 
 
+#%%
+def get_quantity(item):
+    item_date = item_df.loc[item]["date"]
+    item_price = item_df.loc[item]["price"]
+    item_name = item_df.loc[item]["name"]
+
+    # URL Variables
+    time_start = item_date
+    url_base = "https://rest.coinapi.io/v1/"
+    url_ohlcv = "ohlcv/"
+    asset_id_base = "BTC"
+    asset_id_quote = "USD"
+    period_id = "1DAY"
+    include_empty_items = False
+
+    # URL Construction
+    ohlcv_hist_url = f'{url_base}{url_ohlcv}{asset_id_base}/{asset_id_quote}/history?period_id={period_id}&time_start={time_start}&limit=1&include_empty_items={include_empty_items}'
+
+    # API Call for Crypto
+    headers = {'X-CoinAPI-Key' : api_key}
+    response = requests.get(ohlcv_hist_url, headers=headers).json()
+    bitcoin_value_on_item_day = response[0]['price_close']
+    print(bitcoin_value_on_item_day)
+
+    # Quantity of Bitcoin for Price of Item
+    bitcoin_shares = item_price / bitcoin_value_on_item_day
+    print(bitcoin_shares)
+
+    # ==========
+    # Item Quantity at Max Bitcoin
+    item_quantity_max = ((item_df.loc["bitcoin_max"]["price"])*bitcoin_shares)/item_price
+    print(item_quantity_max)
+
+    # ==========
+    # Item Quantity Today
+    today = datetime.datetime.now() - datetime.timedelta(hours = 8)
+    today = today.isoformat()
+
+    time_start = today[:19]
+    ohlcv_hist_url = f'{url_base}{url_ohlcv}{asset_id_base}/{asset_id_quote}/history?period_id={period_id}&time_start={time_start}&limit=1&include_empty_items={include_empty_items}'
+
+    headers = {'X-CoinAPI-Key' : api_key}
+    response = requests.get(ohlcv_hist_url, headers=headers).json()
+
+    bitcoin_today = response[0]['price_close']
+
+    item_quantity_current = (bitcoin_today*bitcoin_shares)/item_price
+    print(item_quantity_current)
+
+    return f'You would have {item_quantity_max} {item_name}s if you sold at the peak. You would have {item_quantity_current} {item_name}s if you sold at the peak.'
+
+#%%
+get_quantity("macbook")
+
+#%%
