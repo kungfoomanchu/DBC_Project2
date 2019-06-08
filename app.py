@@ -127,7 +127,7 @@ item_df = pd.DataFrame(item_dict)
 item_df = item_df.set_index("item")
 item_df
 
-@app.route("/quantity")
+@app.route("/quantity/<item>")
 def get_quantity(item):
     item_date = item_df.loc[item]["date"]
     item_price = item_df.loc[item]["price"]
