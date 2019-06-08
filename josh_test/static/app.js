@@ -28,34 +28,74 @@ var chartGroup = svg.append("g")
 var parseTime = d3.timeParse("%m/%d/%Y");
 
 // create empty array to hold data
-var visdata = [];
-console.log(`VisData: ${visdata}`)
+var visData = [];
+console.log(`VisData: ${visData}`)
+
+// array for datapoints on visualization
+var itemArray = [
+  {
+      "item": "bitcoin",
+      "name": "Bitcoin",
+      "date": "1/9/2014",
+      "price": 0
+},{
+      "item": "bitcoin_max",
+      "name": "Bitcoin Peak",
+      "date": "12/17/2017",
+      "price": 19783.06
+},{
+      "item": "ps4",
+      "name": "PS4",
+      "date": "11/15/2016",
+      "price": 399
+},{
+      "item": "pizza",
+      "name": "Bitcoin Pizza",
+      "date": "05/22/2015",
+      "price": 30
+},{
+      "item": "macbook",
+      "name": "MacBook Pro 2012",
+      "date": "07/30/2014",
+      "price": 1199
+},{
+      "item": "oculus",
+      "name": "Oculus Rift",
+      "date": "03/28/2016",
+      "price": 599
+},{
+      "item": "fiftycent",
+      "name": "50 Cent",
+      "date": "02/11/2014",
+      "price": 400000
+}]
+itemArray.forEach(item => console.log(item)); 
 
 // Load data
-d3.csv("test_data/BTC.csv", function(error, forceData) {
+d3.csv("test_data/BTC.csv", function(error, tempData) {
 
   // Throw an error if one occurs
   if (error) throw error;
 
   // Print the forceData
-  console.log(forceData);
+  console.log(tempData);
 
   // Format the date and cast the force value to a number
-  forceData.forEach(function(data) {
+  tempData.forEach(function(data) {
     data.date = parseTime(data.date);
     data.price = +data.price;
-    visdata.push(data)
+    visData.push(data)
   });
 
   // Configure a time scale
   // d3.extent returns the an array containing the min and max values for the property specified
   var xTimeScale = d3.scaleTime()
-    .domain(d3.extent(forceData, data => data.date))
+    .domain(d3.extent(tempData, data => data.date))
     .range([0, chartWidth]);
 
   // Configure a linear scale with a range between the chartHeight and 0
   var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(forceData, data => data.price)])
+    .domain([0, d3.max(tempData, data => data.price)])
     .range([chartHeight, 0]);
 
   // Create two new functions passing the scales in as arguments
@@ -71,90 +111,10 @@ d3.csv("test_data/BTC.csv", function(error, forceData) {
   // Append an SVG path and plot its points using the line function
   chartGroup.append("path")
     // The drawLine function returns the instructions for creating the line for forceData
-    .attr("d", drawLine(forceData))
+    .attr("d", drawLine(tempData))
     .attr("stroke-width", 1)
     .attr("stroke", "red")
     .style("fill", "none")
     .classed("line", true);
-const tooltip = svg.append("g");
-
-  // Append an SVG group element to the chartGroup, create the left axis inside of it
-  //chartGroup.append("g")
-  //  .classed("axis", true)
-  //  .call(leftAxis);
-
-  // Append an SVG group element to the chartGroup, create the bottom axis inside of it
-  // Translate the bottom axis to the bottom of the page
-  //chartGroup.append("g")
-  //  .classed("axis", true)
-  //  .attr("transform", `translate(0, ${chartHeight})`)
-  //  .call(bottomAxis);
-
-  svg.on("touchmove mousemove", function() {
-    const {date, price} = bisect(d3.mouse(this)[0]);
-
-    tooltip
-         .attr("transform", `translate(${x(date)},${y(price)})`)
-        // .call(callout, `${value.toLocaleString(undefined, {style: "currency", currency: "USD"})} ${date.toLocaleString(undefined, {month: "short", day: "numeric", year: "numeric"})}`);
-  });
-
-  svg.on("touchend mouseleave", () => tooltip.call(callout, null));
-
-  return svg.node();
 });
 
-
-callout = (g, value) => {
-    if (!value) return g.style("display", "none");
-  
-    g
-        .style("display", null)
-        .style("pointer-events", "none")
-        .style("font", "10px sans-serif");
-  
-    const path = g.selectAll("path")
-      .data([null])
-      .join("path")
-        .attr("fill", "white")
-        .attr("stroke", "black");
-  
-    const text = g.selectAll("text")
-      .data([null])
-      .join("text")
-      .call(text => text
-        .selectAll("tspan")
-        .data((value + "").split(/\n/))
-        .join("tspan")
-          .attr("x", 0)
-          .attr("y", (d, i) => `${i * 1.1}em`)
-          .style("font-weight", (_, i) => i ? null : "bold")
-          .text(d => d));
-  
-    const {x, y, width: w, height: h} = text.node().getBBox();
-  
-    text.attr("transform", `translate(${-w / 2},${15 - y})`);
-    path.attr("d", `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`);
-  }
-
-function bisect() {
-    const bisect = d3.bisector(d => d.date).left;
-    return mx => {
-        const date = x.invert(mx);
-        const index = bisect(data, date, 1);
-        const a = data[index - 1];
-        const b = data[index];
-        return date - a.date > b.date - date ? b : a;
-    };
-}
-
-function y() {
-    const y = d3.scaleLinear()
-    .domain([0, d3.max(visdata, data => data.price)]).nice()
-    .range([svgHeight - margin.bottom, margin.top])
-}
-
-function x() { 
-    const x = d3.scaleTime()
-    .domain(d3.extent(visdata, data => data.date))
-    .range([margin.left, svgWidth - margin.right])
-}
