@@ -1,36 +1,12 @@
 import csv
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import requests
 import pandas as pd
 from pprint import pprint
-from datetime import date
-from datetime import datetime
+from datetime import date, datetime
 import numpy as np
 
 from config import api_key
-
-
-#from config import api_key
-#from config import weather_key
-
-
-# # OHLCV Historical URL
-# url_base = "https://rest.coinapi.io/v1/"
-# url_ohlcv = "ohlcv/"
-# asset_id_base = "BTC"
-# asset_id_quote = "USD"
-# period_id = "1DAY"
-# time_start = "2010-01-01T00:00:00"
-# time_end = "2017-02-01T00:00:00"
-# #time_end = ""
-# limit = "100" #cann be max of 100000
-# include_empty_items = False
-# ohlcv_hist_url = f'{url_base}{url_ohlcv}{asset_id_base}/{asset_id_quote}/history?period_id={period_id}&time_start={time_start}&time_end={time_end}&limit={limit}&include_empty_items={include_empty_items}'
-# #print(ohlcv_hist_url)
-# #%% 
-# # Test API Call for Crypto
-# headers = {'X-CoinAPI-Key' : "040C8FCD-C322-4168-97B8-27E979246DAF"}
-# response = requests.get(ohlcv_hist_url, headers=headers).json()
 
 
 import sqlalchemy
