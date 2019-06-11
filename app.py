@@ -476,36 +476,38 @@ def get_quantity_json(item):
 
     # Match Item to Coin Price
     coin_date = item_date[:10]
-    f'Coin_date: {coin_date}'
+    # f'Coin_date: {coin_date}'
 
     btc_price_on_item_day = coin_file_df.loc[coin_date]["price_close"]
-    f'Bitcoin price on item day: {btc_price_on_item_day}'
+    # f'Bitcoin price on item day: {btc_price_on_item_day}'
 
     # Quantity of Bitcoin for Price of Item
     bitcoin_shares = item_price / btc_price_on_item_day
-    f'Bitcoin Shares: {bitcoin_shares}'
+    # f'Bitcoin Shares: {bitcoin_shares}'
 
     # ==========
     # Item Quantity at Max Bitcoin
     item_quantity_max = ((item_df.loc["bitcoin_max"]["price"])*bitcoin_shares)/item_price
-    f'Maximum Item Quantity: {item_quantity_max}'
+    # f'Maximum Item Quantity: {item_quantity_max}'
     print("Item Quantity Max")
-    item_quantity_max = print(item_quantity_max)
+    item_quantity_max = item_quantity_max
 
     # ==========
     # Item Quantity Today
     today = datetime.datetime.now() - datetime.timedelta(hours = 80)
     today = today.isoformat()
-    print(today)
+
     # Trim today for CoinAPI.io
     today = today[:19]
     # Trim today for Coin JSON
     today = today[:10]
-    print(today)
+
     bitcoin_price_today = coin_file_df.loc[today]['price_close']
+    print("Bitcoin Price Today")
     print(bitcoin_price_today)
+
     item_quantity_current = (bitcoin_price_today*bitcoin_shares)/item_price
-    f'Maximum Item Quantity: {item_quantity_current}'
+    # f'Maximum Item Quantity: {item_quantity_current}'
     print("Item Quantity Current")
     print(item_quantity_current)
     #############################################
@@ -528,16 +530,15 @@ def get_quantity_json(item):
     quantity_item_df = pd.DataFrame(final_list)
     # print(quantity_item_df)
     # from sqlalchemy import create_engine
-    engine = create_engine('sqlite://', echo=False)
+    engine2 = create_engine('sqlite://', echo=False)
 
     # engine = create_engine("sqlite:///../database.sqlite")
 
-    quantity_item_df.to_sql('item_quantity_tbl', con=engine)
+    quantity_item_df.to_sql('item_quantity_tbl', con=engine2)
 
-    results = engine.execute("SELECT * FROM item_quantity_tbl").fetchall()
+    results = engine2.execute("SELECT * FROM item_quantity_tbl").fetchall()
 
     ###############
-
 
     return jsonify(final_list)
 
