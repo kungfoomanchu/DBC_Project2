@@ -136,6 +136,7 @@ def list_items():
     item_df
     # print(item_df)
 
+    from sqlalchemy import create_engine
     engine = create_engine('sqlite://', echo=False)
     # engine = create_engine("sqlite:///../database.sqlite")
 
@@ -190,14 +191,19 @@ def list_coins():
     row_list = []
     dict_final = {}
     lst=[]
-    lst = response
+    # lst = response
+
+    print(time_start)
+    print(time_end)
 
     for coin in coins:
         response = requests.get(f'{url_base}{url_ohlcv}{coin}/{asset_id_quote}/history?period_id={period_id}&time_start={time_start}&time_end={time_end}&limit={limit}&include_empty_items={include_empty_items}', headers=headers).json()
+        lst = response
+        print(lst)
         for i in range(len(lst)):
-            row_list.append(coin)
-            row_list.append(lst[i]['time_period_start'])
-            row_list.append(lst[i]['price_close'])
+            # row_list.append(coin)
+            # row_list.append(lst[i]['time_period_start'])
+            # row_list.append(lst[i]['price_close'])
             dict_final['coin']=coin
 
             dict_final['time_start']=lst[i]['time_period_start'][0:10]
@@ -205,9 +211,10 @@ def list_coins():
             final_lst.append(dict_final)
             dict_final = {}
 
-    print(final_lst)
+    # print(final_lst)
     coins_df = pd.DataFrame(final_lst)
-
+    print(coins_df)
+    from sqlalchemy import create_engine
     engine = create_engine('sqlite://', echo=False)
     # engine = create_engine("sqlite:///../database.sqlite")
 
@@ -253,6 +260,7 @@ def list_coins():
 @app.route("/quantity/<item>")
 def get_quantity(item):
 
+    import datetime
     #################
     # Start Item_dict
     #################
@@ -309,9 +317,12 @@ def get_quantity(item):
         "price": 1989.25
     }]
 
+    final_lst = [] 
+    dict_final = {}
+
     item_df = pd.DataFrame(item_dict)
     item_df = item_df.set_index("item")
-    item_df
+    # item_df
     #################
     # End Item_dict
     #################
@@ -367,6 +378,44 @@ def get_quantity(item):
     item_quantity_current = (bitcoin_today*bitcoin_shares)/item_price
     f'Maximum Item Quantity: {item_quantity_current}'
 
+    #############################################
+    # Convert output to sqlite
+    #############################################
+    dict_final['item_name']=item_name
+    dict_final['item_quantity_max']=item_quantity_max
+    dict_final['item_quantity_current']=item_quantity_current
+
+    final_lst.append(dict_final) 
+
+
+
+    # print(final_lst)
+    quantity_item_df = pd.DataFrame(final_lst)
+    # print(quantity_item_df)
+    from sqlalchemy import create_engine
+    engine = create_engine('sqlite://', echo=False)
+
+    # engine = create_engine("sqlite:///../database.sqlite")
+
+    quantity_item_df.to_sql('item_quantity_tbl', con=engine)
+
+
+    results = engine.execute("SELECT * FROM item_quantity_tbl").fetchall()
+    # pprint(results)
+    # lst_data1 = []
+
+    # for result in results:
+    #     lst_data1.append({
+    #         "coin": result[1],
+    #         "price_close": result[2],
+    #         "time_period_start": result[3]
+
+    #NEED TO TURN THIS BACK ON
+    # return jsonify(final_lst)
+    #############################################
+    # End convert output to sqlite
+    #############################################
+
     return f'You would have {item_quantity_max} {item_name}s if you sold at the peak. You would have {item_quantity_current} {item_name}s if you sold at the peak.'
 
 
@@ -377,50 +426,77 @@ def get_quantity(item):
 @app.route("/quantity_json/<item>")
 
 def get_quantity_json(item):
+    #############################################
+    # Internal Item Call
+    #############################################
     url_internal = "http://localhost:5000/items"
     response_internal = requests.get(url_internal).json()
     response_internal = json.dumps(response_internal)
     # The above line gives the output {items_route} below
-    items_route = [{"date": "2009-01-09T20:00:00", "item": "bitcoin", "name": "Bitcoin", "price": 0.0}, {"date": "2017-12-17T20:00:00", "item": "bitcoin_max", "name": "Bitcoin Peak", "price": 19783.06}, {"date": "2015-07-30T20:00:00", "item": "ethereum", "name": "Ethereum", "price": 0.0}, {"date": "2018-01-13T20:00:00", "item": "ethereum_max", "name": "Ethereum Peak", "price": 1432.88}, {"date": "2013-11-15T20:00:00", "item": "ps4", "name": "PS4", "price": 399.0}, {"date": "2010-05-22T20:00:00", "item": "pizza", "name": "Bitcoin Pizza", "price": 30.0}, {"date": "2012-07-30T20:00:00", "item": "macbook", "name": "MacBook Pro 2012", "price": 1199.0}, {"date": "2016-03-28T20:00:00", "item": "oculus", "name": "Oculus Rift", "price": 599.0}, {"date": "2014-02-11T20:00:00", "item": "fiftycent", "name": "50 Cent", "price": 400000.0}, {"date": "2014-02-11T20:00:00", "item": "cigs", "name": "365 Packs of Cigarettes in 2014", "price": 1989.25}]
+    # items_route = [{"date": "2009-01-09T20:00:00", "item": "bitcoin", "name": "Bitcoin", "price": 0.0}, {"date": "2017-12-17T20:00:00", "item": "bitcoin_max", "name": "Bitcoin Peak", "price": 19783.06}, {"date": "2015-07-30T20:00:00", "item": "ethereum", "name": "Ethereum", "price": 0.0}, {"date": "2018-01-13T20:00:00", "item": "ethereum_max", "name": "Ethereum Peak", "price": 1432.88}, {"date": "2013-11-15T20:00:00", "item": "ps4", "name": "PS4", "price": 399.0}, {"date": "2010-05-22T20:00:00", "item": "pizza", "name": "Bitcoin Pizza", "price": 30.0}, {"date": "2012-07-30T20:00:00", "item": "macbook", "name": "MacBook Pro 2012", "price": 1199.0}, {"date": "2016-03-28T20:00:00", "item": "oculus", "name": "Oculus Rift", "price": 599.0}, {"date": "2014-02-11T20:00:00", "item": "fiftycent", "name": "50 Cent", "price": 400000.0}, {"date": "2014-02-11T20:00:00", "item": "cigs", "name": "365 Packs of Cigarettes in 2014", "price": 1989.25}]
     response_internal = json.loads(response_internal)
-    # response_internal = pd.DataFrame(response_internal)
-    # return f'{response_internal}'
+    data = response_internal
+    df = pd.DataFrame.from_dict(data, orient='columns')
+    #pprint(df)
 
-    # Attempting to use loop
-        #     # set up lists to hold reponse info
-        # item_date = []
-        # item_price = []
-        # item_name = []
+    #item_df = pd.DataFrame(item_dict)
+    item_df = df.set_index("item")
 
-        # # Loop through the list of cities and perform a request for data on each
-        # for i in item:
-        #     response_internal = requests.get(url_internal).json()
-        #     item_date = response_internal[item]['date']
-        #     item_price = response_internal[item]['price']
-        #     item_name = response_internal[item]['name']
+    item_date = item_df.loc[item]["date"]
+    item_price = item_df.loc[item]["price"]
+    item_name = item_df.loc[item]["name"]
+    # f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
 
+    #############################################
+    # End Internal Coin Call
+    #############################################
+
+    #############################################
+    # Internal Coin Call
+    #############################################
+
+    # Convert JSON to DataFrame
+    # coin_url_internal = "http://localhost:5000/coin"
+    # coin_response_internal = requests.get(url_internal).json()
+    # coin_response_internal = json.dumps(coin_response_internal)
+    # coin_response_internal = json.loads(coin_response_internal)
+    # coin_data = coin_response_internal
+    # coin_df = pd.DataFrame.from_dict(coin_data, orient='columns')
+    # coin_df = coin_df.set_index("time_period_start")
+
+    # Get coin data from JSON raw file
     # Attempting to use direct JSON file and Pandas
-        # filepath = os.path.join("temp", "items.json")
-        # with open(filepath) as jsonfile:
-        #     items_json = json.load(jsonfile)
+    filepath = os.path.join("temp", "coin.json")
+    with open(filepath) as jsonfile:
+        coin_json = json.load(jsonfile)
 
-        # items_df = pd.DataFrame(items_json)
-        # items_df = items_df.set_index("item")
-        # items_df.head()
-        # item_date = items_df["ps4"]["date"]
+    coin_file_df = pd.DataFrame(coin_json)
+    coin_file_df = coin_file_df.set_index("time_period_start")
+    # coin_file_df.head()
 
-    # Attempting with from_dict
-    response_internal = pd.DataFrame.from_dict(items_route, orient='columns')
+    # Match Item to Coin Price
+    coin_date = item_date[:10]
+    print(coin_date)
 
-    item_date = response_internal[item]['date']
-    item_price = response_internal[item_date]['price']
-    item_name = response_internal[item]['name']
-    # # f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
-    # # return f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
-    return print(item_date)
+    btc_price = coin_file_df.loc[coin_date]["price_close"]
+    print(btc_price)
+    #############################################
+    # End Internal Coin Call
+    #############################################
+
+
+    ###############
+    # For Database
+    final_lst = []
+    dict_final = {}
+    ###############
+
+
+    return item_date
 
 #################################################
 # Flask Last part of Setup
 #################################################
 if __name__ == "__main__":
     app.run(debug=True)
+    # app.run()
