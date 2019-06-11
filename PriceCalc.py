@@ -26,6 +26,7 @@ from pprint import pprint
 from config import api_key
 from config import weather_key
 import json
+import os
 
 
 #%%
@@ -318,3 +319,21 @@ def get_quantity(item):
 get_quantity("macbook")
 
 #%%
+
+# Load JSON
+filepath = os.path.join("temp", "items.json")
+with open(filepath) as jsonfile:
+    items_json = json.load(jsonfile)
+
+item_date = items_json[0]['date']
+print(item_date)
+items_df = pd.DataFrame(items_json)
+items_df = items_df.set_index("item")
+items_df.head()
+
+#%%
+    # item_date = response_internal[item]['date']
+    # item_price = response_internal[item]['price']
+    # item_name = response_internal[item]['name']
+    # f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
+    return f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
