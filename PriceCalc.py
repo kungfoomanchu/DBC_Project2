@@ -332,6 +332,10 @@ items_df = items_df.set_index("item")
 items_df.head()
 
 #%%
+df = pd.DataFrame.from_dict(items_json, orient='columns')
+df.head()
+
+#%%
     # item_date = response_internal[item]['date']
     # item_price = response_internal[item]['price']
     # item_name = response_internal[item]['name']
