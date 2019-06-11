@@ -1,38 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Coins!</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta charset="utf-8">
+  <title>UFO Finder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 <body>
-  <div class="container">
-    <div class="jumbotron" style="text-align: center">
-      <h1>Lorem</h1>
-      <a href="/send" class="btn btn-primary" role="button">Ipsum</a>
+  <div class="wrapper">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">FOMO Bitcoin
+            <img class="nav-ufo" src="static/images/bitcoin.svg">
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="hero text-center">
+      <h1>FOMO Bitcoin</h1>
+      <p>How Much You Would Of Made</p>
     </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <h2>Lorem Ipsum</h2>
-        <div id="plot"></div>
+    <div class="container">
+      <div class="row margin-top-50">
+        <div class="col-md-2">
+          <aside class="filters">
+            <div class="panel panel-default">
+              <div class="panel-heading">Filter Search</div>
+              <div class="panel-body">
+                <form>
+                  <div class="form-group">
+                    <ul class="list-group" id="filters">
+                      <li id="filter category">
+                          <select id = "myList">
+                              <option value = "datetime">date/time</option>
+                              <option value = "city">city</option>
+                              <option value = "state">state</option>
+                              <option value = "country">country</option>
+                              <option value = "shape">shape</option>
+                          </select>
+                      </li>
+                      <li class="filter list-group-item">
+                        <label for="date">Enter Search Term</label>
+                        <input class="form-control" id="datetime" type="text" placeholder="1/11/2011">
+                      </li>
+                    </ul>
+                  </div>
+                  <button id="filter-btn" type="submit" class="btn btn-default">Filter Table</button>
+                </form>
+              </div>
+            </div>
+          </aside>
+        </div>
+        <div class="col-md-10">
+          <div id="grid">
+           
+          </div>
+        </div>
       </div>
     </div>
-    <div id="grid">
-      <div class="col-md-12">
-        <h2>Lorem Ipsum</h2>
-        <div id="plot"></div>
-      </div>
-    </div>
+    <footer class="footer">
+      <span class="bottom">FOMO Bitcoin</span>
+    </footer>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script>
+  <script src="static/js/data.js"></script>
+  <script src="static/js/app.js"></script>
 </body>
 
 </html>

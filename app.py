@@ -409,14 +409,15 @@ def get_quantity_json(item):
         # items_df.head()
         # item_date = items_df["ps4"]["date"]
 
+    # Attempting with from_dict
+    response_internal = pd.DataFrame.from_dict(items_route, orient='columns')
 
-
-    item_date = response_internal[0]['date']
+    item_date = response_internal[item]['date']
     item_price = response_internal[item_date]['price']
     item_name = response_internal[item]['name']
     # # f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
     # # return f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
-    return item_date
+    return print(item_date)
 
 #################################################
 # Flask Last part of Setup
