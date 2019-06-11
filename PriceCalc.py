@@ -25,6 +25,7 @@ import datetime
 from pprint import pprint
 from config import api_key
 from config import weather_key
+import json
 
 
 #%%

@@ -23,6 +23,8 @@ import requests
 import pandas as pd
 import datetime
 import pprint as pprint
+import json
+import os
 
 # User Files
 # import price_calc_flask
@@ -368,6 +370,46 @@ def get_quantity(item):
     return f'You would have {item_quantity_max} {item_name}s if you sold at the peak. You would have {item_quantity_current} {item_name}s if you sold at the peak.'
 
 
+
+#################################################
+# Flask Last part of Setup
+#################################################
+@app.route("/quantity_json/<item>")
+
+def get_quantity_json(item):
+    url_internal = "http://localhost:5000/items"
+    response_internal = requests.get(url_internal).json()
+    response_internal = json.dumps(response_internal)
+    items_route = [{"date": "2009-01-09T20:00:00", "item": "bitcoin", "name": "Bitcoin", "price": 0.0}, {"date": "2017-12-17T20:00:00", "item": "bitcoin_max", "name": "Bitcoin Peak", "price": 19783.06}, {"date": "2015-07-30T20:00:00", "item": "ethereum", "name": "Ethereum", "price": 0.0}, {"date": "2018-01-13T20:00:00", "item": "ethereum_max", "name": "Ethereum Peak", "price": 1432.88}, {"date": "2013-11-15T20:00:00", "item": "ps4", "name": "PS4", "price": 399.0}, {"date": "2010-05-22T20:00:00", "item": "pizza", "name": "Bitcoin Pizza", "price": 30.0}, {"date": "2012-07-30T20:00:00", "item": "macbook", "name": "MacBook Pro 2012", "price": 1199.0}, {"date": "2016-03-28T20:00:00", "item": "oculus", "name": "Oculus Rift", "price": 599.0}, {"date": "2014-02-11T20:00:00", "item": "fiftycent", "name": "50 Cent", "price": 400000.0}, {"date": "2014-02-11T20:00:00", "item": "cigs", "name": "365 Packs of Cigarettes in 2014", "price": 1989.25}]
+    # response_internal = json.loads(response_internal)
+    # response_internal = pd.DataFrame(response_internal)
+    # return f'{response_internal}'
+
+    #     # set up lists to hold reponse info
+    # item_date = []
+    # item_price = []
+    # item_name = []
+
+    # # Loop through the list of cities and perform a request for data on each
+    # for i in item:
+    #     response_internal = requests.get(url_internal).json()
+    #     item_date = response_internal[item]['date']
+    #     item_price = response_internal[item]['price']
+    #     item_name = response_internal[item]['name']
+
+    filepath = os.path.join("temp", "items.json")
+    with open(filepath) as jsonfile:
+        items_json = json.load(jsonfile)
+
+    items_df = pd.DataFrame(items_json)
+    items_df = items_df.set_index("item")
+    items_df.head()
+    # item_date = items_df[item]['date']
+    # item_price = items_df[item_date]['price']
+    # item_name = items_df[item]['name']
+    # f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
+    # return f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
+    return items_df.head()
 
 #################################################
 # Flask Last part of Setup
