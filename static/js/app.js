@@ -48,7 +48,7 @@ submit.on("click", function () {
   // if (strUser === 'datetime'){
   //   var filteredData = tableData.filter(tableData => tableData.datetime === inputValue);
   // } else if (strUser === 'city') {
-  //   var filteredData = tableData.filter(tableData => tableData.city === inputValue);  
+  //   var filteredData = tableData.filter(tableData => tableData.city === inputValue);
   // } else if (strUser === 'state') {
   //   var filteredData = tableData.filter(tableData => tableData.state === inputValue);
   // } else if (strUser === 'country') {
@@ -140,22 +140,12 @@ submit.on("click", function () {
 //////////////////////
 // Start JSON Quantity Interpretation
 //////////////////////
+// This variable will have to become dynamic
 item = "ps4"
 /* global Plotly */
 var url =
   `http://localhost:5000/quantity_json/${item}`;
 
-/**
- * Helper function to select stock data
- * Returns an array of values
- * @param {array} rows
- * @param {integer} index
- * index 0 - Date
- * index 1 - Open
- * index 2 - High
- * index 3 - Low
- * index 4 - Volume
- */
 function unpack(rows, index) {
   return rows.map(function(row) {
     return row[index];
@@ -181,3 +171,6 @@ function getQuantity() {
 }
 
 getQuantity();
+//////////////////////
+// End JSON Quantity Interpretation
+//////////////////////
