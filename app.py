@@ -160,7 +160,8 @@ def list_items():
             "date": result[1],
             "item": result[2],
             "name": result[3],
-            "price": result[4]
+            "price": result[4],
+            "svg": result[5]
         })
     return jsonify(lst_data1)
 
@@ -288,6 +289,7 @@ def get_quantity_json(item):
     item_date = item_df.loc[item]["date"]
     item_price = item_df.loc[item]["price"]
     item_name = item_df.loc[item]["name"]
+    item_svg = item_df.loc[item]["svg"]
     # f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
 
     #############################################
@@ -366,6 +368,7 @@ def get_quantity_json(item):
     dict_final['item_name'] = item_name
     dict_final['item_quantity_max'] = item_quantity_max
     dict_final['item_quantity_current'] = item_quantity_current
+    dict_final['item_svg'] = item_svg
 
     final_list.append(dict_final)
 
