@@ -1,25 +1,38 @@
-'''
-Bitcoin 9 January 2009
-Ethereum    30 July 2015
-PS4 November 15, 2013   $399
-Bitcoin Pizza May 22, 2010, a programmer purchased two large Papa John’s pizzas for 10,000 bitcoins, worth about $30 at the time
+item_dict = [
+    {
+        "item": "bitcoin",
+        "date": "2009-01-09T20:00:00",
+        "price": 0
+},{
+        "item": "bitcoin_max",
+        "date": "2017-12-17T20:00:00",
+        "price": 19783.06
+},{
+        "item": "ethereum",
+        "date": "2015-07-30T20:00:00",
+        "price": 0
+},{
+        "item": "ethereum_max",
+        "date": "2018-01-13T20:00:00",
+        "price": 1432.88
+},{
+        "item": "ps4",
+        "date": "2013-11-15T20:00:00",
+        "price": 399
+},{
+        "item": "pizza",
+        "date": "2010-05-22T20:00:00",
+        "price": 30/10000
+},{
+        "item": "MacBook Pro 2012",
+        "date": "2012-07-30T20:00:00",
+        "price": 1199
+},{
+        "item": "Oculus Rift",
+        "date": "2016-03-28T20:00:00",
+        "price": 599
+}]
 
-MacBook Pro 13-inch, mid-2012
-Type  Midsize
-Screen size  13.322
-Screen resolution  1280 x 800
-Bundled OS  Mac OS
-CPU family  Core i5
-Processor speed  2.519
-System RAM  41
-Pointing device  Trackpad
-Video outputs  DisplayPort
-Maximum battery life  Up to 720
-From $1199.00
-
-Oculus Rift March 28, 2016  $599.99
-
-'''
 
 #%%
 # Dependencies
@@ -29,7 +42,6 @@ import requests
 import pandas as pd
 from pprint import pprint
 from config import api_key
-from config import weather_key
 
 
 #%%
@@ -45,7 +57,7 @@ limit = "100" #cann be max of 100000
 include_empty_items = False
 ohlcv_hist_url = f'{url_base}{url_ohlcv}{asset_id_base}/{asset_id_quote}/history?period_id={period_id}&time_start={time_start}&time_end={time_end}&limit={limit}&include_empty_items={include_empty_items}'
 
-#%% 
+#%%
 # Test API Call for Crypto
 headers = {'X-CoinAPI-Key' : api_key}
 response = requests.get(ohlcv_hist_url, headers=headers).json()
@@ -63,7 +75,7 @@ close = []
 # Loop
 for coin in coins:
     response = requests.get(f'{url_base}{url_ohlcv}{coin}/{asset_id_quote}/history?period_id={period_id}&time_start={time_start}&time_end={time_end}&limit={limit}&include_empty_items={include_empty_items}', headers=headers).json()
-    close.append(response[0]['price_close'])
+    close.append(response)
 
 print(f"The close prices for BTC then ETH: {close}")
 
@@ -77,3 +89,6 @@ coins_dict = {
 
 coins_df = pd.DataFrame(coins_dict)
 coins_df.head()
+
+
+#%%
