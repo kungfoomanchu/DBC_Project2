@@ -71,7 +71,21 @@ db = SQLAlchemy(app)
 def home():
     return render_template("index.html")
 
+#################################################
+# Line Chart
+#################################################
+# create route that renders index.html template
+@app.route("/line")
+def line():
+    return render_template("index3.html")
 
+#################################################
+# Relative Size
+#################################################
+# create route that renders index.html template
+@app.route("/circles")
+def circles():
+    return render_template("circles.html")
 
 #################################################
 # Flask Items Route
@@ -305,7 +319,7 @@ def get_quantity_json(item):
     # f'Item Name: {item_name}, Date: {item_date}, Price: {item_price}'
 
     #############################################
-    # End Internal Coin Call
+    # End Internal Item Call
     #############################################
 
     #############################################
@@ -335,7 +349,13 @@ def get_quantity_json(item):
     coin_date = item_date[:10]
     # f'Coin_date: {coin_date}'
 
-    btc_price_on_item_day = coin_file_df.loc[coin_date]["price_close"]
+    # Account for Pizza
+    if item == "pizza":
+        btc_price_on_item_day = 0.003
+    else:
+        btc_price_on_item_day = coin_file_df.loc[coin_date]["price_close"]
+
+    # btc_price_on_item_day = coin_file_df.loc[coin_date]["price_close"]
     # f'Bitcoin price on item day: {btc_price_on_item_day}'
 
     # Quantity of Bitcoin for Price of Item
@@ -344,10 +364,14 @@ def get_quantity_json(item):
 
     # ==========
     # Item Quantity at Max Bitcoin
-    item_quantity_max = ((item_df.loc["bitcoin_max"]["price"])*bitcoin_shares)/item_price
+    # Account for Cigarettes
+    if item == "cigs":
+        item_quantity_max = (((item_df.loc["bitcoin_max"]["price"])*bitcoin_shares)/item_price)*365/100
+    else:
+        item_quantity_max = ((item_df.loc["bitcoin_max"]["price"])*bitcoin_shares)/item_price
+
     # f'Maximum Item Quantity: {item_quantity_max}'
     print("Item Quantity Max")
-    item_quantity_max = item_quantity_max
 
     # ==========
     # Item Quantity Today
@@ -363,7 +387,12 @@ def get_quantity_json(item):
     print("Bitcoin Price Today")
     print(bitcoin_price_today)
 
-    item_quantity_current = (bitcoin_price_today*bitcoin_shares)/item_price
+    # Accountn for Cigs
+    if item == "cigs":
+        item_quantity_current = ((bitcoin_price_today*bitcoin_shares)/item_price)*365/100
+    else:
+        item_quantity_current = (bitcoin_price_today*bitcoin_shares)/item_price
+
     # f'Maximum Item Quantity: {item_quantity_current}'
     print("Item Quantity Current")
     print(item_quantity_current)
@@ -381,6 +410,7 @@ def get_quantity_json(item):
     dict_final['item_date'] = item_date
     dict_final['item_price'] = item_price
     dict_final['bitcoin_shares'] = bitcoin_shares
+    dict_final['bitcoin_price_today'] = bitcoin_price_today
     dict_final['btc_price_on_item_day'] = btc_price_on_item_day
     dict_final['item_quantity_max'] = item_quantity_max
     dict_final['item_quantity_current'] = item_quantity_current
