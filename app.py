@@ -84,64 +84,62 @@ def list_items():
         "name": "Bitcoin",
         "date": "2009-01-09T20:00:00",
         "price": 0,
-        "svg": "templates/static/images/bitcoin.svg"
+        "svg": "static/images/bitcoin.svg",
+        "bitcoin_price": 0
     },{
         "item": "bitcoin_max",
         "name": "Bitcoin Peak",
         "date": "2017-12-17T20:00:00",
         "price": 19783.06,
-        "svg": "templates/static/images/bitcoin.svg"
-    },{
-        "item": "ethereum",
-        "name": "Ethereum",
-        "date": "2015-07-30T20:00:00",
-        "price": 0
-    },{
-        "item": "ethereum_max",
-        "name": "Ethereum Peak",
-        "date": "2018-01-13T20:00:00",
-        "price": 1432.88
+        "svg": "static/images/bitcoin.svg",
+        "bitcoin_price": 19783.06
     },{
         "item": "ps4",
         "name": "PS4",
         "date": "2013-11-15T20:00:00",
         "price": 399,
-        "svg": "templates/static/images/playstation-logo.svg"
+        "svg": "static/images/playstation-logo.svg",
+        "bitcoin_price": 412.0
     },{
         "item": "pizza",
         "name": "Bitcoin Pizza",
         "date": "2010-05-22T20:00:00",
         "price": 30,
-        "svg": "templates/static/images/pizza-svgrepo-com-simple.svg"
+        "svg": "static/images/pizza-svgrepo-com-simple.svg",
+        "bitcoin_price": 0.003
     },{
         "item": "macbook",
         "name": "MacBook Pro 2012",
         "date": "2012-07-30T20:00:00",
         "price": 1199,
-        "svg": "templates/static/images/laptop.svg"
+        "svg": "static/images/laptop.svg",
+        "bitcoin_price": 9.0979
     },{
         "item": "oculus",
         "name": "Oculus Rift",
         "date": "2016-03-28T20:00:00",
         "price": 599,
-        "svg": "templates/static/images/oculus-rift-virtual-reality-svgrepo-com.svg"
+        "svg": "static/images/oculus-rift-virtual-reality-svgrepo-com.svg",
+        "bitcoin_price": 419.995
     },{
         "item": "fiftycent",
         "name": "50 Cent",
         "date": "2014-02-11T20:00:00",
         "price": 400000,
-        "svg": "templates/static/images/50cent-cd.svg"
+        "svg": "static/images/50cent-cd.svg",
+        "bitcoin_price": 664.666
     },{
         "item": "cigs",
         "name": "365 Packs of Cigarettes in 2014",
-        "date": "2014-02-11T20:00:00",
+        "date": "2014-12-31T20:00:00",
         "price": 1989.25,
-        "svg": "templates/static/images/cigarette-box-lighter.svg"
+        "svg": "static/images/cigarette-box-lighter.svg",
+        "bitcoin_price": 317.0
     }]
 
     item_df = pd.DataFrame(item_dict)
     #item_df = item_df.set_index("item")
-    item_df
+    item_df 
     # print(item_df)
 
     from sqlalchemy import create_engine
@@ -157,11 +155,12 @@ def list_items():
 
     for result in results:
         lst_data1.append({
-            "date": result[1],
-            "item": result[2],
-            "name": result[3],
-            "price": result[4],
-            "svg": result[5]
+            "date": result[2],
+            "item": result[3],
+            "name": result[4],
+            "price": result[5],
+            "svg": result[6],
+            "bitcoin_price": result[1]
         })
     return jsonify(lst_data1)
 
@@ -224,7 +223,9 @@ def list_coins():
     coins_df = pd.DataFrame(final_lst)
     print(coins_df)
     from sqlalchemy import create_engine
-    engine = create_engine('sqlite://', echo=False)
+    engine = create_engine('sqlite:///database/coin_db.sqlite', echo=False)
+    
+    # engine = create_engine('sqlite://', echo=False)
     # engine = create_engine("sqlite:///../database.sqlite")
 
     coins_df.to_sql('coins_tbl', con=engine)
@@ -244,23 +245,34 @@ def list_coins():
 
 
 #################################################
-# Flask Forms Route
+# Save the Database
 #################################################
-# # Query the database and send the jsonified results
-# @app.route("/send", methods=["GET", "POST"])
-# def send():
-#     if request.method == "POST":
-#         coinName = request.form["coinName"]
-#         date = request.form["date"]
-#         price_close = 992.95
 
-#         coin = Coin(name=coinName, date=date, price_close=price_close)
-#         db.session.add(coin)
-#         db.session.commit()
-#         return redirect("/", code=302)
+@app.route("/sqlite")
+def sql_detail():
 
-#     return render_template("form.html")
+   from sqlalchemy import create_engine
 
+   engine = create_engine('sqlite:///database/coin_db.sqlite', echo=False)
+
+   results = engine.execute("SELECT * FROM coins_tbl").fetchall()
+   lst_data1 = []
+
+   for result in results:
+       lst_data1.append({
+           "coin": result[1],
+           "price_close": result[2],
+           "time_period_start": result[3]
+       })
+   print (lst_data1)
+   with open('temp/coin.json', 'a+') as f:
+       json.dump(lst_data1, f)
+
+   return jsonify(lst_data1)
+
+#################################################
+# End Save the Database
+#################################################
 
 
 
@@ -366,6 +378,10 @@ def get_quantity_json(item):
     dict_final = {}
 
     dict_final['item_name'] = item_name
+    dict_final['item_date'] = item_date
+    dict_final['item_price'] = item_price
+    dict_final['bitcoin_shares'] = bitcoin_shares
+    dict_final['btc_price_on_item_day'] = btc_price_on_item_day
     dict_final['item_quantity_max'] = item_quantity_max
     dict_final['item_quantity_current'] = item_quantity_current
     dict_final['item_svg'] = item_svg
@@ -387,6 +403,63 @@ def get_quantity_json(item):
     ###############
 
     return jsonify(final_list)
+
+
+
+
+
+
+#################################################
+# Extra Items
+#################################################
+@app.route("/itemstoo")
+def list_items_too():
+    item_dict_too = [
+    {
+        "item": "bitcoin_max",
+        "name": "Bitcoin Peak",
+        "date": "2017-12-17T20:00:00",
+        "price": 19783.06,
+        "svg": "static/images/bitcoin.svg",
+        "bitcoin_price": 18961.0
+    },{
+        "item": "ps4",
+        "name": "PS4",
+        "date": "2013-11-15T20:00:00",
+        "price": 399,
+        "svg": "static/images/playstation-logo.svg",
+        "bitcoin_price": 412.0
+    },{
+        "item": "macbook",
+        "name": "MacBook Pro 2012",
+        "date": "2012-07-30T20:00:00",
+        "price": 1199,
+        "svg": "static/images/laptop.svg",
+        "bitcoin_price": 9.0979
+    },{
+        "item": "oculus",
+        "name": "Oculus Rift",
+        "date": "2016-03-28T20:00:00",
+        "price": 599,
+        "svg": "static/images/oculus-rift-virtual-reality-svgrepo-com.svg",
+        "bitcoin_price": 419.995
+    },{
+        "item": "fiftycent",
+        "name": "50 Cent",
+        "date": "2014-02-11T20:00:00",
+        "price": 400000,
+        "svg": "static/images/50cent-cd.svg",
+        "bitcoin_price": 664.666
+    },{
+        "item": "cigs",
+        "name": "365 Packs of Cigarettes in 2014",
+        "date": "2014-12-31T20:00:00",
+        "price": 1989.25,
+        "svg": "static/images/cigarette-box-lighter.svg",
+        "bitcoin_price": 317.000
+    }]
+    return jsonify(item_dict_too)
+
 
 #################################################
 # Flask Last part of Setup

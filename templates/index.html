@@ -17,60 +17,67 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="index.html">FOMO Bitcoin
+          <a class="navbar-brand" href="index.html">FOMO Generator
             <img class="nav-ufo" src="{{ url_for('static', filename='images/bitcoin.svg') }}">
           </a>
         </div>
       </div>
     </nav>
     <div class="hero text-center">
-      <h1>FOMO Bitcoin</h1>
-      <p>How Much You Could Have Made</p>
+      <h1>FOMO Generator</h1>
+      <p>How Many Items You Could Have Purchased</p>
     </div>
     <div class="container">
       <div class="row margin-top-50">
         <div class="col-md-2">
           <aside class="filters">
             <div class="panel panel-default">
-              <div class="panel-heading">Filter Search</div>
+              <div class="panel-heading">FOMO Enter</div>
               <div class="panel-body">
                 <form>
                   <div class="form-group">
                     <ul class="list-group" id="filters">
                       <li id="filter category">
                         <select id="myList">
-                          <option value="datetime">date/time</option>
-                          <option value="city">city</option>
-                          <option value="state">state</option>
-                          <option value="country">country</option>
-                          <option value="shape">shape</option>
+                          <option value="macbook">MacBook Pro 2012</option>
+                          <option value="oculus">Oculus Rift</option>
+                          <option value="fiftycent">50 Cent</option>
+                          <option value="cigs">365 Packs of Cigarettes in 2014</option>
+                          <option value="ps4">PS4</option>
                         </select>
-                      </li>
-                      <li class="filter list-group-item">
-                        <label for="date">Enter Search Term</label>
-                        <input class="form-control" id="datetime" type="text" placeholder="1/11/2011">
                       </li>
                     </ul>
                   </div>
-                  <button id="filter-btn" type="submit" class="btn btn-default">Filter Table</button>
+                  <button id="filter-btn" type="submit" class="btn btn-default">Calculate</button>
                 </form>
               </div>
             </div>
           </aside>
         </div>
-        <div class="col-md-10">
-          <div id="grid">
+          <div class="col-md-10">
+              <div>
+                  <h2>Bitcoin at Maximum Price</h2>
+                  <p>At $19,783.06, Dec, 2017</p>
+              </div>
 
-          </div>
-        </div>
+            
+            <div id="grid"><div><p id="insert"> </p></div> </div>
+
+            <div>
+                <h2>Bitcoin at Current Price</h2>
+                <p>At $7993.70, May, 2019</p>
+            </div>
+
+            <div id="grid2"><div><p id="insert2"> </p></div> </div>
+            
       </div>
     </div>
     <footer class="footer">
-      <span class="bottom">FOMO Bitcoin</span>
+      <span class="bottom">FOMO Generator</span>
     </footer>
   </div>
-  <!-->script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script-->
-  <script src="{{ url_for('static', filename='js/data.js') }}"></script>
+  <!--script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script-->
+  <!-- <script src="{{ url_for('static', filename='js/data.js') }}"></script> -->
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 
