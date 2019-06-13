@@ -26,7 +26,15 @@ var bigdiv = d3.select("body").append("div")
     .attr("class", "display")				
     .style("opacity", 0);
 
-var bigdivon = false;
+var littlediv = d3.select('div.display').append('div')
+    .attr("class", "innerdisplay");
+
+var bigdivtoo = d3.select("body").append("div")	
+    .attr("class", "displaytoo")				
+    .style("opacity", 0);
+
+var littledivtoo = d3.select('div.displaytoo').append('div')
+    .attr("class", "innerdisplaytoo");
 
 // Select body, append SVG area to it, and set its dimensions
 var svg = d3.select("body")
@@ -156,7 +164,7 @@ function graphIt(firstData, secondData){
             div.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-            div.html(d.name + "<br/>" + formatTime(d.date) + "<br/>"  + `$${d.bitcoin_price}`)	
+            div.html(d.name + "<br/>" + formatTime(d.date) + "<br/>"  + `BTC = $${d.bitcoin_price}`)	
                 .style("left", (d3.select(this).attr("x")+100) + "px")		
                 .style("top", (d3.select(this).attr("y")+100) + "px");
         })
@@ -173,11 +181,25 @@ function graphIt(firstData, secondData){
             console.log("Click:", d, i);
             bigdiv.transition()		
                 .duration(500)		
-                .style("opacity", .9);		
-            bigdiv.html(d.name + "<br/>" + formatTime(d.date) + "<br/>"  + `$${d.bitcoin_price}`)	
+                .style("opacity", .9)
                 .style("left", "100px")		
                 .style("top", "100px");
-            bigdivon = true;
+            littlediv.html(d.name + "<br/>" + 'Released: ' + formatTime(d.date)
+                + "<br/>"  + `BTC on this day: $${d.bitcoin_price}` + "<br/>"
+                + '<img src="' + d.image + '" style="width:500px">');
+            bigdivtoo.transition()		
+                .duration(500)		
+                .style("opacity", .9)
+                .style("left", "675px")		
+                .style("top", "100px");
+            littledivtoo.html(d.story);		
+
+            // d3.select('div.display').append('div')
+            //     .attr("class", "innerdisplay")
+            //     .html(d.name + "<br/>" + 'Released: ' + formatTime(d.date)
+            //     + "<br/>"  + `BTC on this day: $${d.bitcoin_price}` + "<br/>"
+            //     + '<img src="' + d.image + '">');	
+            // bigdiv.html(d.name + "<br/>" + formatTime(d.date) + "<br/>"  + `$${d.bitcoin_price}`);
         })
         .transition()
             .duration(3000)
