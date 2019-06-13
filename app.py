@@ -28,7 +28,10 @@ import os
 
 # User Files
 # import price_calc_flask
-from config import api_key
+if os.environ.get('api_key') is not None:
+    api_key = os.environ.get('api_key')
+else:
+    from config import api_key
 
 #################################################
 # Flask Setup

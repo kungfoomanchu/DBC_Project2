@@ -60,8 +60,9 @@ submit.on("click", function () {
       var item_quantity_current = data[0].item_quantity_max;
       var item_quantity_max = data[0].item_quantity_current;
       var item_svg = data[0].item_svg;
+      var item_price = data[0].item_price;
 
-      var item_quantities = [item_name, item_quantity_current, item_quantity_max, item_svg]
+      var item_quantities = [item_name, item_quantity_current, item_quantity_max, item_svg, item_price]
       console.log(item_quantities)
       //Plotly.newPlot("plot", data, layout);
 
@@ -247,9 +248,9 @@ submit.on("click", function () {
 
 
     var max_display = Math.ceil(data_of_item[1]);
-    document.getElementById("insert").innerHTML = max_display;
+    document.getElementById("insert").innerHTML = "You could have "+ max_display + " " + strUser + ". Price: " + data_of_item[4];
     var current_display = Math.ceil(data_of_item[2]);
-    document.getElementById("insert2").innerHTML = current_display;
+    document.getElementById("insert2").innerHTML = "You could buy "+ current_display + " " + strUser + " today. Price:" + data_of_item[4];
 
   });
 
