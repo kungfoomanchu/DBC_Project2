@@ -2,10 +2,10 @@ var svgWidth = 2000;
 var svgHeight = 1000;
 
 var margin = {
-    top: 60,
-    right: 60,
-    bottom: 60,
-    left: 60
+  top: 60,
+  right: 60,
+  bottom: 60,
+  left: 60
 };
 
 var visData = [];
@@ -18,15 +18,23 @@ var chartWidth = svgWidth - margin.left - margin.right;
 var chartHeight = svgHeight - margin.top - margin.bottom;
 
 // Define the div for the tooltip
-var div = d3.select("body").append("div")
-    .attr("class", "tooltip")
+var div = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
     .style("opacity", 0);
 
-var bigdiv = d3.select("body").append("div")
-    .attr("class", "display")
+var bigdiv = d3.select("body").append("div")	
+    .attr("class", "display")				
     .style("opacity", 0);
 
-var bigdivon = false;
+var littlediv = d3.select('div.display').append('div')
+    .attr("class", "innerdisplay");
+
+var bigdivtoo = d3.select("body").append("div")	
+    .attr("class", "displaytoo")				
+    .style("opacity", 0);
+
+var littledivtoo = d3.select('div.displaytoo').append('div')
+    .attr("class", "innerdisplaytoo");
 
 // Select body, append SVG area to it, and set its dimensions
 var svg = d3.select("body")
@@ -75,7 +83,7 @@ var parseTime = d3.timeParse("%Y-%m-%d");
 var formatTime = d3.timeFormat("%m/%d/%y");
 
 function dateConvert(tempData) {
-    tempData.forEach(function (data) {
+    tempData.forEach(function(data){
         console.log(data)
         let dateString = data.date.split("T");
         data.date = parseTime(dateString[0]);
@@ -84,8 +92,8 @@ function dateConvert(tempData) {
     });
 }
 
-function graphIt(firstData, secondData) {
-
+function graphIt(firstData, secondData){
+    
     var xScaleLocal = xScale(firstData);
 
     var yScaleLocal = yScale(firstData);
@@ -97,35 +105,35 @@ function graphIt(firstData, secondData) {
     chartGroup.append("path")
         .attr("d", drawLine(firstData))
         .attr("stroke-width", 2)
-        .attr("stroke", "#00ffcc")
+        .attr("stroke", "#263646")
         .style("fill", "none")
         .classed("line", true)
         .style("filter", "url(#drop-shadow)")
         .transition()
-        .duration(2000)
-        .attr("stroke", "white");
+            .duration(2000)
+            .attr("stroke", "white");
 
     chartGroup.selectAll('circle')
         .data(secondData)
         .enter()
         .append("circle")
-        .attr("cx", d => xScaleLocal(d.date))
-        .attr("cy", d => yScaleLocal(d.bitcoin_price))
+        .attr("cx", d=>xScaleLocal(d.date))
+        .attr("cy", d=>yScaleLocal(d.bitcoin_price))
         .attr("r", '7px')
         .attr("stroke", "white")
         .attr("stroke-width", "2")
         .attr("fill", "red")
         .style("opacity", 0)
         .transition()
-        .duration(3000)
-        .style("opacity", 1);
+            .duration(3000)
+            .style("opacity", 1);
 
     chartGroup.selectAll('rect')
         .data(secondData)
         .enter()
         .append("rect")
-        .attr("x", d => xScaleLocal(d.date))
-        .attr("y", d => yScaleLocal(d.bitcoin_price))
+        .attr("x", d=>xScaleLocal(d.date))
+        .attr("y", d=>yScaleLocal(d.bitcoin_price))
         .attr('height', 50)
         .attr('width', 50)
         .attr("stroke", "white")
@@ -134,97 +142,121 @@ function graphIt(firstData, secondData) {
         .attr("id", secondData.item)
         .style("opacity", 0)
         .transition()
-        .duration(3000)
-        .style("opacity", 1);
-
+            .duration(3000)
+            .style("opacity", 1);
+        
     chartGroup.selectAll('image')
         .data(secondData)
         .enter()
         .append("image")
-        .attr("x", d => xScaleLocal(d.date))
-        .attr("y", d => yScaleLocal(d.bitcoin_price))
+        .attr("x", d=>xScaleLocal(d.date))
+        .attr("y", d=>yScaleLocal(d.bitcoin_price))
         .attr('height', 50)
         .attr('width', 50)
-        .attr('href', d => d.svg)
+        .attr('href', d=>d.svg)
         .style("opacity", 0)
-        .on("mouseover", function (d, i) {
+        .on("mouseover", function(d, i) {
             console.log("Mouseover:", d, i);
             d3.select(this)
                 .transition()
-                .duration(200)
-                .style("opacity", .5);
-            div.transition()
-                .duration(200)
-                .style("opacity", .9);
-            div.html(d.name + "<br/>" + formatTime(d.date) + "<br/>" + `$${d.bitcoin_price}`)
-                .style("left", (d3.select(this).attr("x") + 100) + "px")
-                .style("top", (d3.select(this).attr("y") + 100) + "px");
+                    .duration(200)
+                    .style("opacity", .5);
+            div.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            div.html(d.name + "<br/>" + formatTime(d.date) + "<br/>"  + `BTC = $${d.bitcoin_price}`)	
+                .style("left", (d3.select(this).attr("x")+100) + "px")		
+                .style("top", (d3.select(this).attr("y")+100) + "px");
         })
-        .on("mouseout", function (d, i) {
+        .on("mouseout", function(d, i) {
             d3.select(this)
                 .transition()
-                .duration(500)
-                .style("opacity", 1);
-            div.transition()
+                    .duration(500)
+                    .style("opacity", 1);
+            div.transition()		
                 .duration(500)
                 .style("opacity", 0);
         })
-        .on("click", function (d, i) {
+        .on("click", function(d, i) {
             console.log("Click:", d, i);
             bigdiv.transition()
+                .style("opacity", 0)
+                .style("left", "0px")		
+                .style("top", "0px");
+            bigdivtoo.transition()			
+                .style("opacity", 0)
+                .style("left", "0px")		
+                .style("top", "0px");
+            bigdiv.transition()		
                 .duration(500)
-                .style("opacity", .9);
-            bigdiv.html(d.name + "<br/>" + formatTime(d.date) + "<br/>" + `$${d.bitcoin_price}`)
-                .style("left", "100px")
+                .delay(500)		
+                .style("opacity", .9)
+                .style("left", "100px")		
                 .style("top", "100px");
-            bigdivon = true;
+            bigdivtoo.transition()		
+                .duration(500)
+                .delay(500)		
+                .style("opacity", .9)
+                .style("left", "675px")		
+                .style("top", "100px");
+            littlediv.html(d.name + "<br/>" + 'Released: ' + formatTime(d.date)
+                + "<br/>"  + `BTC on this day: $${d.bitcoin_price}` + "<br/>"
+                + '<img src="' + d.image + '" style="width:500px">');
+            littledivtoo.html(d.story);		
+
+            // d3.select('div.display').append('div')
+            //     .attr("class", "innerdisplay")
+            //     .html(d.name + "<br/>" + 'Released: ' + formatTime(d.date)
+            //     + "<br/>"  + `BTC on this day: $${d.bitcoin_price}` + "<br/>"
+            //     + '<img src="' + d.image + '">');	
+            // bigdiv.html(d.name + "<br/>" + formatTime(d.date) + "<br/>"  + `$${d.bitcoin_price}`);
         })
         .transition()
-        .duration(3000)
-        .style("opacity", 1)
+            .duration(3000)
+            .style("opacity", 1)
 };
 
-function shadow() {
+function shadow(){
     filter.select('feGaussianBlur')
         .transition()
-        .duration(4000)
-        .attr("stdDeviation", 1.5);
+            .duration(4000)
+            .attr("stdDeviation", 1.5);
     filter.select('feOffset')
         .transition()
-        .duration(4000)
-        .attr("dx", 2)
-        .attr("dy", 2);
+            .duration(4000)
+            .attr("dx", 2)
+            .attr("dy", 2);
 }
 
-function xScale(graphData) {
+function xScale(graphData){
     var xScale = d3.scaleTime()
         .domain(d3.extent(graphData, data => data.time_period_start))
         .range([0, chartWidth]);
     return xScale
 }
 
-function yScale(graphData) {
+function yScale(graphData){
     var yScale = d3.scaleLinear()
         .domain([0, d3.max(graphData, data => data.price_close)])
         .range([chartHeight, 0]);
     return yScale
 }
 
-d3.json('/static/temp/coin.json', function (tempData) {
+d3.json('/static/temp/coin.json', function(tempData) {
     console.log(tempData);
     // Format the date and cast the price value to a number
-    tempData.forEach(function (data) {
-        data.time_period_start = parseTime(data.time_period_start);
-        data.price_close = +data.price_close;
-        visData.push(data)
+    tempData.forEach(function(data) {
+      data.time_period_start = parseTime(data.time_period_start);
+      data.price_close = +data.price_close;
+      visData.push(data)
     });
-    d3.json('http://127.0.0.1:5000/itemstoo', function (data) {
+    d3.json('http://127.0.0.1:5000/itemstoo', function(data) {
         console.log(data);
         dateConvert(data);
         graphIt(visData, displayData);
         shadow();
     });
-
+    
 })
 
 // Load and format data

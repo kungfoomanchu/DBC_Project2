@@ -1,7 +1,8 @@
 // Get Item Input
-var inputElement = d3.select("#myList");
-var inputValue = inputElement.property("value");
-item = inputValue;
+// var inputElement = d3.select("#myList");
+// var inputValue = inputElement.property("value");
+// item = inputValue;
+item = "ps4"
 console.log(item);
 
 // item = "ps4"
@@ -9,7 +10,7 @@ console.log(item);
 var url =
     `http://127.0.0.1:5000/quantity_json/${item}`;
 
-function getQuantity(cb) {
+function getQuantity() {
 
     d3.json(url).then(function (data) {
         // To see what the data looks like, check the console
@@ -25,10 +26,10 @@ function getQuantity(cb) {
         var item_quantity_max = data[0].item_quantity_current;
         var item_svg = data[0].item_svg;
 
-        var item_quantities = [item_name, item_quantity_current, item_quantity_max, item_svg, item_date, item_price, bitcoin_shares, bitcoin_price_today, btc_price_on_item_day]
+        const item_quantities = [item_name, item_quantity_current, item_quantity_max, item_svg, item_date, item_price, bitcoin_shares, bitcoin_price_today, btc_price_on_item_day]
         console.log(item_quantities)
 
-        cb(item_quantities);
+        return item_quantities;
     });
 }
 
@@ -44,23 +45,33 @@ const celestialData = [2439.7,
 ];
 
 
-//////////////////////////////////////
+////////////////////////////////////
 // Attempt to make celestialData variable
 
-// getQuantity(function (data_of_item) {
-//     //getItems();
-//     console.log(data_of_item);
+getQuantity(function (data_of_item) {
+    //getItems();
+    console.log(data_of_item);
 
 
-//     var celestialData = [1,
-//         data_of_item[1],
-//         data_of_item[2]
-//     ];
-//     console.log(celestialData)
-//     return celestialData
-// });
+    const sizeData = [1,
+        data_of_item[1],
+        data_of_item[2]
+    ];
+    console.log(sizeData)
+    return sizeData
+});
 
-////////////////////////////////////
+
+// var item_sizes = getQuantity()
+// console.log(item_sizes)
+
+// const celestialData = [
+//     1,
+//     item_sizes[1],
+//     item_sizes[2]
+// ];
+// console.log(celestialData)
+//////////////////////////////////
 
 const display = d3.select("#display");
 
@@ -157,10 +168,8 @@ class planetDisplay {
 }
 
 var planets = new planetDisplay(celestialData);
-// var planets = new planetDisplay(getQuantity());
+// var planets = new planetDisplay(getQuantity(celestialData));
 planets.initDisplay();
 
 // On click, transition to other scale
 d3.select(document).on("click", planets.updateDisplay.bind(planets));
-
-

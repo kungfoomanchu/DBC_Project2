@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +9,6 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
 </head>
-
 <body>
         <div class="hero text-center">
                 <h1>FOMO Generator</h1>
@@ -45,18 +43,14 @@
                     </aside>
                   </div>
     <a-scene antialias="true">
-
         <a-entity id="display"></a-entity>
-
         <!-- Camera -->
         <a-entity position="0 1.6 5">
             <a-entity camera="fov: 60" look-controls wasd-controls></a-entity>
         </a-entity>
-
         <a-plane position="0 0 -10" rotation="-90 0 0" width="4" height="4" color="black"></a-plane>
         <a-sky color="#ECECEC"></a-sky>
     </a-scene>
     <script src="{{ url_for('static', filename='js/circles.js') }}"></script>
 </body>
-
-</html>
+</html>   

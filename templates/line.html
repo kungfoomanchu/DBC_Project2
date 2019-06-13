@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>TEST</title>
+    <title>BTC Chart</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.js"></script>
     <style>
         div.tooltip {
@@ -24,8 +24,8 @@
 
         div.display {
             position: absolute;
-            text-align: center;
-            width: 1200px;
+            text-align: left;
+            width: 550px;
             height: 700px;
             padding: 2px;
             font: 18px sans-serif;
@@ -34,17 +34,42 @@
             border: 0px;
             border-radius: 8px;
             pointer-events: none;
-            box-shadow: 5px 5px 10px grey;
+            box-shadow: 5px 5px 10px black;
+        }
+
+        div.innerdisplay{
+            font: 24px sans-serif;
+            padding: 30px;
+        }
+
+        div.displaytoo {
+            position: absolute;
+            text-align: left;
+            width: 550px;
+            height: 250px;
+            padding: 2px;
+            font: 18px sans-serif;
+            color: rgb(143, 143, 143);
+            background: white;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            box-shadow: 5px 5px 10px black;
+        }
+
+        div.innerdisplaytoo {
+            font: 24px sans-serif;
+            padding: 30px;
         }
 
         .body {
-            background: #00ffcc;
+            background: #263646;
         }
     </style>
 </head>
 
 <body class="body">
-    <script src="/static/js/app-line.js"></script>
+    <script src="/static/js/line.js"></script>
 </body>
 
 </html>

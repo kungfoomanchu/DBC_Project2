@@ -77,7 +77,15 @@ def home():
 # create route that renders index.html template
 @app.route("/line")
 def line():
-    return render_template("index3.html")
+    return render_template("line.html")
+
+#################################################
+# FOMO Generator
+#################################################
+# create route that renders index.html template
+@app.route("/fomo")
+def fomo():
+    return render_template("fomo.html")
 
 #################################################
 # Relative Size
@@ -180,6 +188,7 @@ def list_items():
 
 
 
+
 #################################################
 # Flask Coin API Route
 #################################################
@@ -279,7 +288,7 @@ def sql_detail():
            "time_period_start": result[3]
        })
    print (lst_data1)
-   with open('temp/coin.json', 'a+') as f:
+   with open('temp/coin.json', 'w+') as f:
        json.dump(lst_data1, f)
 
    return jsonify(lst_data1)
@@ -383,6 +392,9 @@ def get_quantity_json(item):
     # Trim today for Coin JSON
     today = today[:10]
 
+    # Hard Coding Today
+    today = "2019-06-08"
+    
     bitcoin_price_today = coin_file_df.loc[today]['price_close']
     print("Bitcoin Price Today")
     print(bitcoin_price_today)
@@ -451,43 +463,56 @@ def list_items_too():
         "date": "2017-12-17T20:00:00",
         "price": 19783.06,
         "svg": "static/images/bitcoin.svg",
-        "bitcoin_price": 18961.0
+        "bitcoin_price": 18961.0,
+        "image": "static/images/lambo.png",
+        "story": 'During the Bitcoin frenzy of late 2017 and early 2018, one Bitcoin was worth nearly $20,000! <br/><br/> All my HODLers in the house throw your hands up and say: "AYYyyyYYYYYYYY<br/>YYYYYyyyYYYYYYYYYY LAMBO".'
     },{
         "item": "ps4",
         "name": "PS4",
         "date": "2013-11-15T20:00:00",
         "price": 399,
         "svg": "static/images/playstation-logo.svg",
-        "bitcoin_price": 412.0
+        "bitcoin_price": 412.0,
+        "image": "static/images/ps4.jpg",
+        "story": "On release, the PS4 cost consumers $399.99. Although it seems like a relatively recent development in gaming, Sony's most recent console iteration was actually released all the way back in 2013! The PS4 is the console that allowed us to play classics like Knack and Knack 2!"
     },{
         "item": "macbook",
         "name": "MacBook Pro 2012",
         "date": "2012-07-30T20:00:00",
         "price": 1199,
         "svg": "static/images/laptop.svg",
-        "bitcoin_price": 9.0979
+        "bitcoin_price": 9.0979,
+        "image": "static/images/mac.jpg",
+        "story": "Apple released the MacBook Pro 2012 on 07/30/12. The laptop came standard with a 2.5GHz dual core i5 Intel processor, 4GB of RAM, a 500GB Hard Drive (not even solid state!), and a native screen resolution of 1280 by 800. MSRP on release? $1199! Talk about a ripoff!"
     },{
         "item": "oculus",
         "name": "Oculus Rift",
         "date": "2016-03-28T20:00:00",
         "price": 599,
         "svg": "static/images/oculus-rift-virtual-reality-svgrepo-com.svg",
-        "bitcoin_price": 419.995
+        "bitcoin_price": 419.995,
+        "image": "static/images/oculus.jpg",
+        "story": 'Now owned by Facebook, the original Oculus Rift gave gamers a new way to explore new worlds in deeply immersive virtual reality. The Oculus is the first major step towards creating a real life "Ready Player One" scenario. <br/><br/> MSRP? $599! What a steal!'
     },{
         "item": "fiftycent",
         "name": "50 Cent",
         "date": "2014-02-11T20:00:00",
         "price": 400000,
         "svg": "static/images/50cent-cd.svg",
-        "bitcoin_price": 664.666
-    },{
+        "bitcoin_price": 664.666,
+        "image": "static/images/50cent.jpg",
+        "story": 'In 2014, Curtis "Fitty Cent" Jackson accepted Bitcoin as payment for his album "Animal Ambition". He reportedly made enough for his Bitcoin to be worth $8 Million at peak value. Unfortunately, he converted his BTC to cash as soon as he received it. Sorry, Mr. Jackson. I am for real.'
+    },{   
         "item": "cigs",
         "name": "365 Packs of Cigarettes in 2014",
         "date": "2014-12-31T20:00:00",
         "price": 1989.25,
         "svg": "static/images/cigarette-box-lighter.svg",
-        "bitcoin_price": 317.000
+        "bitcoin_price": 317.000,
+        "image": "static/images/cigs.jpg",
+        "story": 'If you smoke a pack a day, then in 2014, you spend around $2000 on cigarettes. If you bought Bitcoin instead, I wonder how you would be doing? <br/><br/> Aside from having working lungs of course.'
     }]
+
     return jsonify(item_dict_too)
 
 

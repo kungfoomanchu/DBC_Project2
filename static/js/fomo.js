@@ -44,11 +44,11 @@ submit.on("click", function () {
   var url =
     `http://127.0.0.1:5000/quantity_json/${item}`;
 
-  // function unpack(rows, index) {
-  //   return rows.map(function(row) {
-  //     return row[index];
-  //   });
-  // }
+  function unpack(rows, index) {
+    return rows.map(function(row) {
+      return row[index];
+    });
+  }
 
   function getQuantity(cb) {
 

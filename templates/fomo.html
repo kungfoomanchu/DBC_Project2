@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>FOMO Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="wrapper">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html">FOMO Generator
+            <img class="nav-ufo" src="{{ url_for('static', filename='images/bitcoin.svg') }}">
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="hero text-center">
+      <h1>FOMO Generator</h1>
+      <p>How Many Items You Could Have Purchased</p>
+    </div>
+    <div class="container">
+      <div class="row margin-top-50">
+        <div class="col-md-2">
+          <aside class="filters">
+            <div class="panel panel-default">
+              <div class="panel-heading">FOMO Enter</div>
+              <div class="panel-body">
+                <form>
+                  <div class="form-group">
+                    <ul class="list-group" id="filters">
+                      <li id="filter category">
+                        <select id="myList">
+                          <option value="macbook">MacBook Pro 2012</option>
+                          <option value="oculus">Oculus Rift</option>
+                          <option value="fiftycent">50 Cent</option>
+                          <option value="cigs">365 Packs of Cigarettes in 2014</option>
+                          <option value="ps4">PS4</option>
+                          <option value="pizza">Bitcoin Pizza</option>
+                        </select>
+                      </li>
+                    </ul>
+                  </div>
+                  <button id="filter-btn" type="submit" class="btn btn-default">Calculate</button>
+                </form>
+              </div>
+            </div>
+          </aside>
+        </div>
+        <div class="col-md-10">
+          <div>
+            <h2>Bitcoin at Maximum Price</h2>
+            <p>At $19,783.06, Dec, 2017</p>
+          </div>
+
+
+          <div id="grid">
+            <div>
+              <p id="insert"> </p>
+            </div>
+          </div>
+
+          <div>
+            <h2>Bitcoin at Current Price</h2>
+            <p>At $7993.70, May, 2019</p>
+          </div>
+
+          <div id="grid2">
+            <div>
+              <p id="insert2"> </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <footer class="footer">
+        <span class="bottom">FOMO Generator</span>
+      </footer>
+    </div>
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js"></script-->
+    <!-- <script src="{{ url_for('static', filename='js/data.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/fomo.js') }}"></script>
+</body>
+
+</html>
