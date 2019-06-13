@@ -48,18 +48,18 @@ const celestialData = [2439.7,
 ////////////////////////////////////
 // Attempt to make celestialData variable
 
-// getQuantity(function (data_of_item) {
-//     //getItems();
-//     console.log(data_of_item);
+getQuantity(function (data_of_item) {
+    //getItems();
+    console.log(data_of_item);
 
 
-//     const celestialData = [1,
-//         data_of_item[1],
-//         data_of_item[2]
-//     ];
-//     console.log(celestialData)
-//     return celestialData
-// });
+    const sizeData = [1,
+        data_of_item[1],
+        data_of_item[2]
+    ];
+    console.log(sizeData)
+    return sizeData
+});
 
 
 // var item_sizes = getQuantity()
