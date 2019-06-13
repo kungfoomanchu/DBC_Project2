@@ -279,7 +279,7 @@ def sql_detail():
            "time_period_start": result[3]
        })
    print (lst_data1)
-   with open('temp/coin.json', 'a+') as f:
+   with open('temp/coin.json', 'w+') as f:
        json.dump(lst_data1, f)
 
    return jsonify(lst_data1)
