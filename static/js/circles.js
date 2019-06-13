@@ -1,9 +1,11 @@
 var submit = d3.select("#filter-btn");
 var draw = d3.select("#filter-btn-too");
+var clear = d3.select("#filter-btn-three");
 // var tbody = d3.select("tbody");
 // var output = d3.select(".table table-striped");
 
 var celestialData = [];
+var resetArr = [];
 
 submit.on("click", function () {
     d3.event.preventDefault();
@@ -32,7 +34,15 @@ draw.on("click", function () {
     var planets = new planetDisplay(celestialData);
     planets.initDisplay();
     // On click, transition to other scale
-    d3.select(document).on("click", planets.updateDisplay.bind(planets));
+    // d3.select(document).on("click", planets.updateDisplay.bind(planets));
+})
+
+clear.on("click", function () {
+    // d3.event.preventDefault();
+    var planets = new planetDisplay(resetArr);
+    planets.initDisplay();
+    // On click, transition to other scale
+    // d3.select(document).on("click", planets.updateDisplay.bind(planets));
 })
 
 const display = d3.select("#display");
