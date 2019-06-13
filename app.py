@@ -383,6 +383,9 @@ def get_quantity_json(item):
     # Trim today for Coin JSON
     today = today[:10]
 
+    # Hard Coding Today
+    today = "2019-06-08"
+
     bitcoin_price_today = coin_file_df.loc[today]['price_close']
     print("Bitcoin Price Today")
     print(bitcoin_price_today)
