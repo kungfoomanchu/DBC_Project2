@@ -1,80 +1,41 @@
-// Get Item Input
-// var inputElement = d3.select("#myList");
-// var inputValue = inputElement.property("value");
-// item = inputValue;
-item = "ps4"
-console.log(item);
+var submit = d3.select("#filter-btn");
+var draw = d3.select("#filter-btn-too");
+// var tbody = d3.select("tbody");
+// var output = d3.select(".table table-striped");
 
-// item = "ps4"
-// Feed Item Input into Flask and get JSON
-var url =
-    `http://127.0.0.1:5000/quantity_json/${item}`;
+var celestialData = [];
 
-function getQuantity() {
+submit.on("click", function () {
+    d3.event.preventDefault();
+    var inputElement = d3.select("#myList");
+    var item = inputElement.property("value");
+    console.log(item);
 
-    d3.json(url).then(function (data) {
-        // To see what the data looks like, check the console
-        console.log(data[0]);
-        // Grab values from the data json object to build the plots
-        var item_name = data[0].item_name;
-        var item_date = data[0].item_date;
-        var item_price = data[0].item_price;
-        var bitcoin_shares = data[0].bitcoin_shares;
-        var bitcoin_price_today = data[0].bitcoin_price_today;
-        var btc_price_on_item_day = data[0].btc_price_on_item_day;
-        var item_quantity_current = data[0].item_quantity_max;
-        var item_quantity_max = data[0].item_quantity_current;
-        var item_svg = data[0].item_svg;
+    var url = `http://127.0.0.1:5000/quantity_json/${item}`;
 
-        const item_quantities = [item_name, item_quantity_current, item_quantity_max, item_svg, item_date, item_price, bitcoin_shares, bitcoin_price_today, btc_price_on_item_day]
-        console.log(item_quantities)
+    function getQuantity() {
+        d3.json(url).then(function (data) {
+            console.log(data[0]);
+            celestialData = [];
+            var item_quantity_current = data[0].item_quantity_current;
+            var item_quantity_max = data[0].item_quantity_max;
+            celestialData = [1, item_quantity_current, item_quantity_max]
+            console.log(celestialData)
+            //   cb(item_quantities);
+        });
+    }
+    getQuantity();
+})
 
-        return item_quantities;
-    });
-}
-
-// Radius (km) of Mercury, Mars, Venus, Earth, Neptune, Uranus, Saturn, and Jupiter.
-const celestialData = [2439.7,
-    3396.2,
-    6051.9,
-    6378.1,
-    24764,
-    25559,
-    60268,
-    71492
-];
-
-
-////////////////////////////////////
-// Attempt to make celestialData variable
-
-getQuantity(function (data_of_item) {
-    //getItems();
-    console.log(data_of_item);
-
-
-    const sizeData = [1,
-        data_of_item[1],
-        data_of_item[2]
-    ];
-    console.log(sizeData)
-    return sizeData
-});
-
-
-// var item_sizes = getQuantity()
-// console.log(item_sizes)
-
-// const celestialData = [
-//     1,
-//     item_sizes[1],
-//     item_sizes[2]
-// ];
-// console.log(celestialData)
-//////////////////////////////////
+draw.on("click", function () {
+    d3.event.preventDefault();
+    var planets = new planetDisplay(celestialData);
+    planets.initDisplay();
+    // On click, transition to other scale
+    d3.select(document).on("click", planets.updateDisplay.bind(planets));
+})
 
 const display = d3.select("#display");
-
 // TODO: use scale instead of radius (more efficient transitions)
 // also clean up this mess...
 class planetDisplay {
@@ -167,11 +128,8 @@ class planetDisplay {
     }
 }
 
-var planets = new planetDisplay(celestialData);
-// var planets = new planetDisplay(getQuantity(celestialData));
-planets.initDisplay();
+// var planets = new planetDisplay(celestialData);
+// planets.initDisplay();
 
-// On click, transition to other scale
-d3.select(document).on("click", planets.updateDisplay.bind(planets));
-
-
+// // On click, transition to other scale
+// d3.select(document).on("click", planets.updateDisplay.bind(planets));
