@@ -3,7 +3,7 @@ var submit = d3.select("#filter-btn");
 var tbody = d3.select("tbody");
 var output = d3.select(".table table-striped");
 
-var canvas_Xsize = 800
+var canvas_Xsize = 1200
 var canvas_Ysize = 800
 
 
