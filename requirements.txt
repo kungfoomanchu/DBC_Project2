@@ -10,7 +10,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.3
 jsonify==0.5
 MarkupSafe==1.1.1
-numpy==1.19
+numpy==1.22.0
 pandas==0.24.2
 pprint==0.1
 psycopg2==2.7.6.1
